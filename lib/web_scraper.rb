@@ -27,14 +27,22 @@ class WebScraper
     doc1.each { |block|
     block = block.to_s
     block = block.partition('decoration-none">').last
-    #block = block.split(' ')
     restaurantName = block.partition('</a>').first
-    #restaurantName.slice!(0)
-    restaurantList.push (restaurantName)  
-    puts restaurantName
-    }
+    #if restaurantName begins with number removes number from title
+    #else removes spacing from site formatting
 
-    #puts doc1
+    if restaurantName[/\d/] != nil
+      restaurantName = restaurantName.partition('.').last
+    else
+      restaurantName = restaurantName.partition('                   ').last
+    end
+    if restaurantName.include?("&amp")
+      restaurantName.sub! '&amp;', ' & '
+    end
+    restaurantList.push (restaurantName)  
+    }
+    puts restaurantList
+
   end
  end
 
